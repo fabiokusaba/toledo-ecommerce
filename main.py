@@ -1,5 +1,4 @@
-from flask import Flask, make_response
-from markupsafe import escape
+from flask import Flask
 from flask import render_template
 from flask import request
 
@@ -9,22 +8,44 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route("/sobre")
-def sobre():
-    return "<h1> Tudo o que você procura está aqui, venda, compre, desapegue!</h1>"
+@app.route("/cadastro/usuario")
+def usuario():
+    return render_template('usuario.html', titulo="Cadastro de Usuário")
 
-@app.route("/sobre/privacidade")
-def sobre_privacidade():
-    return "<h4> Nosso site segue as Leis Gerais de Proteção aos Dados, seus dados estão totalmente seguros.</h4>"
+@app.route("/cadastro/cadastrar_usuario", methods=['POST'])
+def cadastrar_usuario():
+    return request.form
 
-@app.route("/user/<username>")
-def username(username):
-    cookie = make_response("<h2>cookie criado</h2>")
-    cookie.set_cookie('username', username)
-    return cookie
+@app.route("/cadastro/anuncio")
+def anuncio():
+    return render_template('anuncio.html', titulo="Cadastro de Anúncio")
 
-@app.route("/user2/")
-@app.route("/user2/<username>")
-def username2(username=None):
-    cookie_username = request.cookies.get('username')
-    return render_template('user.html', username=username, cookie_username=cookie_username)
+@app.route("/cadastro/cadastrar_anuncio", methods=['POST'])
+def cadastrar_anuncio():
+    return request.form
+
+@app.route("/anuncios/pergunta")
+def pergunta_anuncio():
+    return render_template('pergunta.html', titulo="Perguntas do Anúncio")
+
+@app.route("/anuncios/compra")
+def compra_anuncio():
+    print('Compra realizada com sucesso!')
+    return ""
+
+@app.route("/anuncios/favoritos")
+def anuncio_favorito():
+    print('Anúncio favoritado com sucesso!')
+    return ""
+
+@app.route("/config/categoria")
+def categoria_config():
+    return render_template('categoria.html', titulo="Configurações da Categoria")
+
+@app.route("/relatorio/vendas")
+def relatorio_venda():
+    return render_template('vendas.html', titulo="Relatório de Vendas")
+
+@app.route("/relatorio/compras")
+def relatorio_compra():
+    return render_template('compras.html', titulo="Relatório de Compras")
