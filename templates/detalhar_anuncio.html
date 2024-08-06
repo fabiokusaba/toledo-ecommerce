@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrocaFácil - Detalhes do {{titulo}}</title>
+</head>
+<body>
+    <h2>Detalhes do {{titulo}}</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Descrição</th>
+                <th>Quantidade</th>
+                <th>Preço</th>
+                <th>Categoria</th>
+                <th>Anunciante</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ anuncio.titulo }}</td>
+                <td>{{ anuncio.descricao }}</td>
+                <td>{{ anuncio.quantidade }}</td>
+                <td>{{ anuncio.preco }}</td>
+                <td>{{ anuncio.categoria_id }}</td>
+                <td>{{ anuncio.usuario_id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href={{url_for("rota_anuncio")}}>Voltar</a>
+</body>
+</html>
