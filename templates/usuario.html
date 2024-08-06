@@ -49,10 +49,13 @@
                     <td>{{ usuario.telefone }}</td>
                     <td>{{ usuario.endereco }}</td>
                     <td><a href="/usuario/editar/{{usuario.id}}">Editar</a></td>
+                    <td><a href="/usuario/detalhar/{{usuario.id}}">Detalhar</a></td>
                     <td><a href="/usuario/remover/{{usuario.id}}">Remover</a></td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <a href={{url_for('index')}}>Voltar</a>
 </body>
 </html>
