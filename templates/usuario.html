@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TrocaFácil - {{titulo}}</title>
+    <title>TrocaFácil - Cadastro de {{titulo}}</title>
 </head>
 <body>
-    <h2>{{titulo}}</h2>
+    <h2>Cadastro de {{titulo}}</h2>
 
     <form action="cadastrar_usuario" method="post">
         <label for="nome">Nome:</label>
@@ -26,5 +26,29 @@
         
         <input type="submit" value="Cadastrar">
     </form>
+
+    <h2>Lista de {{titulo}}</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Password</th>
+                <th>Telefone</th>
+                <th>Endereço</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.nome }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.password }}</td>
+                    <td>{{ usuario.telefone }}</td>
+                    <td>{{ usuario.endereco }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
