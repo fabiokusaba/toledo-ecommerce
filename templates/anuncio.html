@@ -27,8 +27,45 @@
         
         <label for="preco">Preço:</label>
         <input type="number" id="preco" name="preco">
+
+        <label for="usuario">Usuário:</label>
+        <input type="number" id="usuario" name="usuario">
         
         <input type="submit" value="Cadastrar">
     </form>
+
+    <h2>Lista de {{titulo}}</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Descrição</th>
+                <th>Quantidade</th>
+                <th>Preço</th>
+                <th>Categoria</th>
+                <th>Anunciante</th>
+                <th>Editar</th>
+                <th>Detalhar</th>
+                <th>Remover</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for anuncio in anuncios %}
+                <tr>
+                    <td>{{ anuncio.titulo }}</td>
+                    <td>{{ anuncio.descricao }}</td>
+                    <td>{{ anuncio.quantidade }}</td>
+                    <td>{{ anuncio.preco }}</td>
+                    <td>{{ anuncio.categoria_id }}</td>
+                    <td>{{ anuncio.usuario_id }}</td>
+                    <td><a href="/anuncio/editar/{{anuncio.id}}">Editar</a></td>
+                    <td><a href="/anuncio/detalhar/{{anuncio.id}}">Detalhar</a></td>
+                    <td><a href="/anuncio/remover/{{anuncio.id}}">Remover</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href={{url_for('index')}}>Voltar</a>
 </body>
 </html>
