@@ -35,32 +35,68 @@ class Usuario(db.Model):
         self.endereco = endereco
 
 
+class Categoria(db.Model):
+    id = db.Column('id', db.Integer, primary_key=True)
+    nome = db.Column('nome', db.String(100))
+
+    def __init__(self, nome):
+        self.nome = nome
+
+
 @app.route("/")
 def index():
     return render_template('index.html')
 
 @app.route("/cadastro/usuario")
 def rota_usuario():
-    return render_template('usuario.html', usuarios = Usuario.query.all(), titulo="Usuário")
+    return render_template('usuario.html', usuarios = Usuario.query.all(), titulo = "Usuário")
 
-@app.route("/cadastro/cadastrar_usuario", methods=['POST'])
+@app.route("/usuario/cadastrar", methods=['POST'])
 def cadastrar_usuario():
     usuario = Usuario(request.form.get('nome'), request.form.get('email'), request.form.get('password'), request.form.get('telefone'), request.form.get('endereco'))
     db.session.add(usuario)
     db.session.commit()
     return redirect(url_for('rota_usuario'))
 
+@app.route("/usuario/detalhar/<int:id>")
+def buscar_usuario(id):
+    usuario = Usuario.query.get(id)
+    return usuario.nome
+
+@app.route("/usuario/editar/<int:id>", methods=['GET', 'POST'])
+def editar_usuario(id):
+    usuario = Usuario.query.get(id)
+    if request.method == 'POST':
+        usuario.nome = request.form.get('nome')
+        usuario.email = request.form.get('email')
+        usuario.password = request.form.get('password')
+        usuario.telefone = request.form.get('telefone')
+        usuario.endereco = request.form.get('endereco')
+        db.session.add(usuario)
+        db.session.commit()
+        return redirect(url_for('rota_usuario'))
+
+    return render_template('editar_usuario.html', usuario = usuario, titulo = "Usuário")
+
+@app.route("/usuario/remover/<int:id>")
+def remover_usuario(id):
+    usuario = Usuario.query.get(id)
+    db.session.delete(usuario)
+    db.session.commit()
+    return redirect(url_for('rota_usuario'))
+
+
 @app.route("/cadastro/anuncio")
 def anuncio():
-    return render_template('anuncio.html', titulo="Cadastro de Anúncio")
+    return render_template('anuncio.html', categorias = Categoria.query.all(), titulo = "Anúncio")
 
-@app.route("/cadastro/cadastrar_anuncio", methods=['POST'])
+@app.route("/anuncio/cadastrar", methods=['POST'])
 def cadastrar_anuncio():
     return request.form
 
 @app.route("/anuncios/pergunta")
 def pergunta_anuncio():
-    return render_template('pergunta.html', titulo="Perguntas do Anúncio")
+    return render_template('pergunta.html', titulo = "Perguntas do Anúncio")
 
 @app.route("/anuncios/compra")
 def compra_anuncio():
@@ -73,16 +109,23 @@ def anuncio_favorito():
     return ""
 
 @app.route("/config/categoria")
-def categoria_config():
-    return render_template('categoria.html', titulo="Configurações da Categoria")
+def rota_categoria():
+    return render_template('categoria.html', categorias = Categoria.query.all(), titulo = "Categoria")
+
+@app.route("/categoria/cadastrar", methods=['POST'])
+def cadastrar_categoria():
+    categoria = Categoria(request.form.get('nome'))
+    db.session.add(categoria)
+    db.session.commit()
+    return redirect(url_for('rota_categoria'))
 
 @app.route("/relatorio/vendas")
 def relatorio_venda():
-    return render_template('vendas.html', titulo="Relatório de Vendas")
+    return render_template('vendas.html', titulo = "Relatório de Vendas")
 
 @app.route("/relatorio/compras")
 def relatorio_compra():
-    return render_template('compras.html', titulo="Relatório de Compras")
+    return render_template('compras.html', titulo = "Relatório de Compras")
 
 
 if __name__ == 'main':
