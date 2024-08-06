@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrocaFácil - Edição de {{titulo}}</title>
+</head>
+<body>
+    <h2>Edição de {{titulo}}</h2>
+
+    <form action="/usuario/editar/{{usuario.id}}" method="post">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" value="{{usuario.nome}}">
+
+        <label for="email">E-mail:</label>
+        <input type="text" id="email" name="email" value="{{usuario.email}}">
+
+        <label for="password">Password:</label>
+        <input type="text" id="password" name="password" value="{{usuario.password}}">
+
+        <label for="telefone">Telefone:</label>
+        <input type="text" id="telefone" name="telefone" value="{{usuario.telefone}}">
+
+        <label for="endereco">Endereço:</label>
+        <input type="text" id="endereco" name="endereco" value="{{usuario.endereco}}">
+        
+        <input type="submit" value="Editar">
+    </form>
+
+    <a href={{url_for("rota_usuario")}}>Cancelar</a>
+</body>
+</html>
