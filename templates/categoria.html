@@ -21,6 +21,9 @@
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
+                <th>Editar</th>
+                <th>Detalhar</th>
+                <th>Remover</th>
             </tr>
         </thead>
         <tbody>
@@ -28,9 +31,14 @@
                 <tr>
                     <td>{{ categoria.id }}</td>
                     <td>{{ categoria.nome }}</td>
+                    <td><a href="/categoria/editar/{{categoria.id}}">Editar</a></td>
+                    <td><a href="/categoria/detalhar/{{categoria.id}}">Detalhar</a></td>
+                    <td><a href="/categoria/remover/{{categoria.id}}">Remover</a></td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <a href={{url_for('index')}}>Voltar</a>
 </body>
 </html>
