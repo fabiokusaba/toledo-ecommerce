@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrocaFácil - Edição de {{titulo}}</title>
+</head>
+<body>
+    <h2>Edição de {{titulo}}</h2>
+
+    <form action="/anuncio/editar/{{anuncio.id}}" method="post">
+        <label for="titulo">Título:</label>
+        <input type="text" id="titulo" name="titulo", value="{{anuncio.titulo}}">
+
+        <label for="descricao">Descrição:</label>
+        <input type="text" id="descricao" name="descricao", value="{{anuncio.descricao}}">
+
+        <label for="categoria">Categoria:</label>
+        <select name="categoria" id="categoria">
+            {% for categoria in categorias %}
+                <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="quantidade">Quantidade:</label>
+        <input type="number" id="quantidade" name="quantidade", value="{{anuncio.quantidade}}">
+        
+        <label for="preco">Preço:</label>
+        <input type="number" id="preco" name="preco", value="{{anuncio.preco}}">
+
+        <label for="usuario">Usuário:</label>
+        <input type="number" id="usuario" name="usuario", value="{{anuncio.usuario_id}}">
+        
+        <input type="submit" value="Editar">
+    </form>
+
+    <a href={{url_for("rota_usuario")}}>Cancelar</a>
+</body>
+</html>
