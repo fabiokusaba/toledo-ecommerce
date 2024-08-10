@@ -61,6 +61,51 @@ class Categoria(db.Model):
         self.nome = nome
 
 
+class Compra(db.Model):
+    id = db.Column('id', db.Integer, primary_key=True)
+    anuncio_id = db.Column('anuncio_id', db.Integer, db.ForeignKey("anuncio.id"))
+    usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey("usuario.id"))
+
+    def __init__(self, anuncio_id, usuario_id):
+        self.anuncio_id = anuncio_id
+        self.usuario_id = usuario_id
+
+
+class Favorito(db.Model):
+    id = db.Column('id', db.Integer, primary_key=True)
+    anuncio_id = db.Column('anuncio_id', db.Integer, db.ForeignKey("anuncio.id"))
+    usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey("usuario.id"))
+
+    def __init__(self, anuncio_id, usuario_id):
+        self.anuncio_id = anuncio_id
+        self.usuario_id = usuario_id
+
+
+class Pergunta(db.Model):
+    id = db.Column('id', db.Integer, primary_key=True)
+    texto = db.Column('texto', db.String(150))
+    anuncio_id = db.Column('anuncio_id', db.Integer, db.ForeignKey("anuncio.id"))
+    usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey("usuario.id"))
+
+    def __init__(self, texto, anuncio_id, usuario_id):
+        self.texto = texto
+        self.anuncio_id = anuncio_id
+        self.usuario_id = usuario_id
+
+
+class Resposta(db.Model):
+    id = db.Column('id', db.Integer, primary_key=True)
+    texto = db.Column('texto', db.String(150))
+    pergunta_id = db.Column('pergunta_id', db.Integer, db.ForeignKey("pergunta.id"))
+    usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey("usuario.id"))
+
+    def __init__(self, texto, pergunta_id, usuario_id):
+        self.texto = texto
+        self.pergunta_id = pergunta_id
+        self.usuario_id = usuario_id
+
+
+
 @app.errorhandler(404)
 def pagina_nao_encontrada(error):
     return render_template('error404.html')
