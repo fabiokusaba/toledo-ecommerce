@@ -199,22 +199,52 @@ def remover_anuncio(id):
     db.session.commit()
     return redirect(url_for('rota_anuncio'))
 
+@app.route("/anuncio/comprar/<int:id>")
+def comprar_anuncio(id):
+    compra = Compra(id, 1)
+    db.session.add(compra)
+    db.session.commit()
+    return redirect(url_for('rota_anuncio'))
+
+@app.route("/anuncio/favoritar/<int:id>")
+def favoritar_anuncio(id):
+    favorito = Favorito(id, 1)
+    db.session.add(favorito)
+    db.session.commit()
+    return redirect(url_for('rota_anuncio'))
+
 
 @app.route("/anuncios/pergunta")
 def pergunta_anuncio():
-    return render_template('pergunta.html', titulo = "Perguntas do Anúncio")
+    return render_template('pergunta.html', perguntas = Pergunta.query.all(), titulo = "Faça uma pergunta")
+
+
+@app.route("/anuncios/pergunta/enviar", methods=['POST'])
+def enviar_pergunta():
+    pergunta = Pergunta(request.form.get('texto'), request.form.get('anuncio_id'), request.form.get('usuario_id'))
+    db.session.add(pergunta)
+    db.session.commit()
+    return redirect(url_for('index'))
+
+@app.route("/anuncios/resposta/enviar", methods=['GET', 'POST'])
+def enviar_resposta():
+    if request.method == 'POST':
+        pergunta = Resposta(request.form.get('texto'), request.form.get('pergunta_id'), request.form.get('usuario_id'))
+        db.session.add(pergunta)
+        db.session.commit()
+    return render_template('resposta.html', respostas = Resposta.query.all(), titulo = "Pense na resposta")
 
 
 @app.route("/anuncios/compra")
 def compra_anuncio():
     print('Compra realizada com sucesso!')
-    return ""
+    return render_template('compras_realizadas.html', compras = Compra.query.all(), titulo = "Compras")
 
 
 @app.route("/anuncios/favoritos")
 def anuncio_favorito():
     print('Anúncio favoritado com sucesso!')
-    return ""
+    return render_template('anuncios_favoritos.html', favoritos = Favorito.query.all(), titulo = "Favoritos")
 
 
 @app.route("/config/categoria")
