@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrocaFácil - {{titulo}}</title>
+</head>
+<body>
+    <h2>{{titulo}}</h2>
+
+    <form action="/anuncios/resposta/enviar" method="post">
+        <label for="texto">Qual a sua resposta para a pergunta?</label>
+        <input type="text" id="texto" name="texto">
+
+        <label for="pergunta_id">Para qual pergunta você gostaria de enviar a sua resposta?</label>
+        <input type="number" id="pergunta_id" name="pergunta_id">
+        
+        <label for="usuario_id">Qual o seu identificador de usuário?</label>
+        <input type="number" id="usuario_id" name="usuario_id">
+
+        <input type="submit" value="Enviar">
+    </form>
+
+    <h2>Respostas encaminhadas</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Mensagem</th>
+                <th>Pergunta</th>
+                <th>Usuário</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for resposta in respostas %}
+                <tr>
+                    <td>{{ resposta.id }}</td>
+                    <td>{{ resposta.texto }}</td>
+                    <td>{{ resposta.pergunta_id }}</td>
+                    <td>{{ resposta.usuario_id }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href={{url_for('index')}}>Voltar</a>
+</body>
+</html>
