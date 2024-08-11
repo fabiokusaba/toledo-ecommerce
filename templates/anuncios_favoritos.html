@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrocaFácil - {{titulo}}</title>
+</head>
+<body>
+    <h2>{{titulo}}</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Anúncio</th>
+                <th>Usuário</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for favorito in favoritos %}
+                <tr>
+                    <td>{{ favorito.id }}</td>
+                    <td>{{ favorito.anuncio_id }}</td>
+                    <td>{{ favorito.usuario_id }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href={{url_for('index')}}>Voltar</a>
+</body>
+</html>
