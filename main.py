@@ -3,6 +3,8 @@ from flask import render_template
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from urllib.parse import quote
+from flask_login import (current_user, LoginManager, login_user, logout_user, login_required)
+import hashlib
 
 app = Flask(__name__)
 
@@ -19,11 +21,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
+app.secret_key = 'cavalo come gohan no cafe da manha'
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
 class Usuario(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     nome = db.Column('nome', db.String(150))
     email = db.Column('email', db.String(50))
-    password = db.Column('password', db.String(10))
+    password = db.Column('password', db.String(255))
     telefone = db.Column('telefone', db.String(50))
     endereco = db.Column('endereco', db.String(100))
 
@@ -33,6 +40,18 @@ class Usuario(db.Model):
         self.password = password
         self.telefone = telefone
         self.endereco = endereco
+
+    def is_authenticated(self):
+        return True
+    
+    def is_active(self):
+        return True
+    
+    def is_anonymous(self):
+        return False
+    
+    def get_id(self):
+        return str(self.id)
 
 
 class Anuncio(db.Model):
@@ -116,9 +135,36 @@ def erro_interno_servidor(error):
     return render_template('error500.html')
 
 
+@login_manager.user_loader
+def load_user(id):
+    return Usuario.query.get(id)
+
+
 @app.route("/")
 def index():
     return render_template('index.html')
+
+
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = hashlib.sha512(str(request.form.get('password')).encode("utf-8")).hexdigest()
+
+        user = Usuario.query.filter_by(email=email, password=password).first()
+
+        if user:
+            login_user(user)
+            return redirect(url_for('index'))
+        else:
+            return redirect(url_for('login'))
+        
+    return render_template('login.html')
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 
 @app.route("/cadastro/usuario")
@@ -127,7 +173,8 @@ def rota_usuario():
 
 @app.route("/usuario/cadastrar", methods=['POST'])
 def cadastrar_usuario():
-    usuario = Usuario(request.form.get('nome'), request.form.get('email'), request.form.get('password'), request.form.get('telefone'), request.form.get('endereco'))
+    hash_password = hashlib.sha512(str(request.form.get('password')).encode("utf-8")).hexdigest()
+    usuario = Usuario(request.form.get('nome'), request.form.get('email'), hash_password, request.form.get('telefone'), request.form.get('endereco'))
     db.session.add(usuario)
     db.session.commit()
     return redirect(url_for('rota_usuario'))
@@ -143,7 +190,7 @@ def editar_usuario(id):
     if request.method == 'POST':
         usuario.nome = request.form.get('nome')
         usuario.email = request.form.get('email')
-        usuario.password = request.form.get('password')
+        usuario.password = hashlib.sha512(str(request.form.get('password')).encode("utf-8")).hexdigest()
         usuario.telefone = request.form.get('telefone')
         usuario.endereco = request.form.get('endereco')
         db.session.add(usuario)
@@ -161,6 +208,7 @@ def remover_usuario(id):
 
 
 @app.route("/cadastro/anuncio")
+@login_required
 def rota_anuncio():
     return render_template('anuncio.html', categorias = Categoria.query.all(), anuncios = Anuncio.query.all(), titulo = "Anúncio")
 
