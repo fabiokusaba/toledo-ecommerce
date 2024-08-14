@@ -4,17 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TrocaFácil - Página de Login</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
 </head>
 <body>
-    <h2>Login</h2>
-    <form action="/login" method="post">
-        <label for="email">Email</label>
-        <input type="text" id="email" name="email">
+    <div class="container mt-4 mb-4">
+        <div class="page-header">
+            <h2>Login</h2>
+        </div>
+        <form action="/login" method="post">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" class="form-control" id="email" name="email">
+            </div>
 
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password">
+            </div>
 
-        <input type="submit" value="Logar">
-    </form>
+            <button type="submit" class="btn btn-outline-success mt-2">Logar</button>
+            <a class="btn btn-outline-danger mt-2" href={{url_for('index')}}>Cancelar</a>
+        </form>
+    </div>
 </body>
 </html>
