@@ -4,72 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TrocaFácil - {{titulo}}</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
 </head>
 <body>
-    <h2>Cadastro de {{titulo}}</h2>
+    <div class="container mt-4 mb-4">
+        <div class="page-header">
+            <h2>Cadastro de {{titulo}}</h2>
+        </div>
 
-    <form action="/anuncio/cadastrar" method="post">
-        <label for="titulo">Título:</label>
-        <input type="text" id="titulo" name="titulo">
+        <form action="/anuncio/cadastrar" method="post">
+            <div class="form-group">
+                <label for="titulo">Título:</label>
+                <input type="text" class="form-control" id="titulo" name="titulo">
+            </div>
 
-        <label for="descricao">Descrição:</label>
-        <input type="text" id="descricao" name="descricao">
+            <div class="form-group">
+                <label for="descricao">Descrição:</label>
+                <input type="text" class="form-control" id="descricao" name="descricao">
+            </div>
 
-        <label for="categoria">Categoria:</label>
-        <select name="categoria" id="categoria">
-            {% for categoria in categorias %}
-                <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
-            {% endfor %}
-        </select>
+            <div class="form-group">
+                <label for="categoria">Categoria:</label>
+                <select class="form-select" aria-label="Default select example" name="categoria" id="categoria">
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}">{{ categoria.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
-        <label for="quantidade">Quantidade:</label>
-        <input type="number" id="quantidade" name="quantidade">
-        
-        <label for="preco">Preço:</label>
-        <input type="number" id="preco" name="preco">
+            <div class="form-group">
+                <label for="quantidade">Quantidade:</label>
+                <input type="number" class="form-control" id="quantidade" name="quantidade">
+            </div>
 
-        <label for="usuario">Usuário:</label>
-        <input type="number" id="usuario" name="usuario">
-        
-        <input type="submit" value="Cadastrar">
-    </form>
+            <div class="form-group">
+                <label for="preco">Preço:</label>
+                <input type="number" class="form-control" id="preco" name="preco">
+            </div>
 
-    <h2>Lista de {{titulo}}</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Descrição</th>
-                <th>Quantidade</th>
-                <th>Preço</th>
-                <th>Categoria</th>
-                <th>Anunciante</th>
-                <th>Editar</th>
-                <th>Detalhar</th>
-                <th>Remover</th>
-                <th>Comprar</th>
-                <th>Favoritar</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for anuncio in anuncios %}
+            <div class="form-group">
+                <label for="usuario">Usuário:</label>
+                <input type="number" class="form-control" id="usuario" name="usuario">
+            </div>
+
+            <button type="submit" class="btn btn-success mt-2">Cadastrar</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <div class="page-header">
+            <h2>Lista de {{titulo}}</h2>
+        </div>
+
+        <table class="table table-striped table-responsive table-bordered">
+            <thead class="thead-default">
                 <tr>
-                    <td>{{ anuncio.titulo }}</td>
-                    <td>{{ anuncio.descricao }}</td>
-                    <td>{{ anuncio.quantidade }}</td>
-                    <td>{{ anuncio.preco }}</td>
-                    <td>{{ anuncio.categoria_id }}</td>
-                    <td>{{ anuncio.usuario_id }}</td>
-                    <td><a href="/anuncio/editar/{{anuncio.id}}">Editar</a></td>
-                    <td><a href="/anuncio/detalhar/{{anuncio.id}}">Detalhar</a></td>
-                    <td><a href="/anuncio/remover/{{anuncio.id}}">Remover</a></td>
-                    <td><a href="/anuncio/comprar/{{anuncio.id}}">Comprar</a></td>
-                    <td><a href="/anuncio/favoritar/{{anuncio.id}}">Favoritar</a></td>
+                    <th>Título</th>
+                    <th>Descrição</th>
+                    <th>Quantidade</th>
+                    <th>Preço</th>
+                    <th>Categoria</th>
+                    <th>Anunciante</th>
+                    <th>Editar</th>
+                    <th>Detalhar</th>
+                    <th>Remover</th>
+                    <th>Comprar</th>
+                    <th>Favoritar</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <a href={{url_for('index')}}>Voltar</a>
+            </thead>
+            <tbody>
+                {% for anuncio in anuncios %}
+                    <tr>
+                        <td>{{ anuncio.titulo }}</td>
+                        <td>{{ anuncio.descricao }}</td>
+                        <td>{{ anuncio.quantidade }}</td>
+                        <td>{{ anuncio.preco }}</td>
+                        <td>{{ anuncio.categoria_id }}</td>
+                        <td>{{ anuncio.usuario_id }}</td>
+                        <td><a class="btn btn-outline-primary" href="/anuncio/editar/{{anuncio.id}}">Editar</a></td>
+                        <td><a class="btn btn-outline-info" href="/anuncio/detalhar/{{anuncio.id}}">Detalhar</a></td>
+                        <td><a class="btn btn-outline-danger" href="/anuncio/remover/{{anuncio.id}}">Remover</a></td>
+                        <td><a class="btn btn-outline-success" href="/anuncio/comprar/{{anuncio.id}}">Comprar</a></td>
+                        <td><a class="btn btn-outline-warning" href="/anuncio/favoritar/{{anuncio.id}}">Favoritar</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    
+        <a class="btn btn-outline-secondary" href={{url_for('index')}}>Voltar</a>
+    </div>
 </body>
 </html>
