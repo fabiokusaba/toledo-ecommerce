@@ -142,7 +142,7 @@ def load_user(id):
 
 @app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template('index.html', titulo = "Anúncios", anuncios = Anuncio.query.all())
 
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -225,7 +225,6 @@ def cadastrar_anuncio():
     return redirect(url_for('rota_anuncio'))
 
 @app.route("/anuncio/detalhar/<int:id>")
-@login_required
 def buscar_anuncio(id):
     anuncio = Anuncio.query.get(id)
     return render_template('detalhar_anuncio.html', anuncio = anuncio, titulo = "Anúncio")
