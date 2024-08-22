@@ -218,7 +218,8 @@ def rota_anuncio():
 @app.route("/anuncio/cadastrar", methods=['POST'])
 @login_required
 def cadastrar_anuncio():
-    anuncio = Anuncio(request.form.get('titulo'), request.form.get('descricao'), request.form.get('quantidade'), request.form.get('preco'), request.form.get('categoria'), request.form.get('usuario'))
+    user_id = current_user.id
+    anuncio = Anuncio(request.form.get('titulo'), request.form.get('descricao'), request.form.get('quantidade'), request.form.get('preco'), request.form.get('categoria'), user_id)
     db.session.add(anuncio)
     db.session.commit()
     return redirect(url_for('rota_anuncio'))
@@ -257,7 +258,8 @@ def remover_anuncio(id):
 @app.route("/anuncio/comprar/<int:id>")
 @login_required
 def comprar_anuncio(id):
-    compra = Compra(id, 1)
+    user_id = current_user.id
+    compra = Compra(id, user_id)
     db.session.add(compra)
     db.session.commit()
     return redirect(url_for('rota_anuncio'))
@@ -265,7 +267,8 @@ def comprar_anuncio(id):
 @app.route("/anuncio/favoritar/<int:id>")
 @login_required
 def favoritar_anuncio(id):
-    favorito = Favorito(id, 1)
+    user_id = current_user.id
+    favorito = Favorito(id, user_id)
     db.session.add(favorito)
     db.session.commit()
     return redirect(url_for('rota_anuncio'))
