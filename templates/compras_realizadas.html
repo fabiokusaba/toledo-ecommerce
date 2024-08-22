@@ -13,6 +13,7 @@
                 <th>ID</th>
                 <th>Anúncio</th>
                 <th>Usuário</th>
+                <th>Situação</th>
             </tr>
         </thead>
         <tbody>
@@ -21,6 +22,7 @@
                     <td>{{ compra.id }}</td>
                     <td>{{ compra.anuncio_id }}</td>
                     <td>{{ compra.usuario_id }}</td>
+                    <td>Em processamento</td>
                 </tr>
             {% endfor %}
         </tbody>

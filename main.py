@@ -262,7 +262,7 @@ def comprar_anuncio(id):
     compra = Compra(id, user_id)
     db.session.add(compra)
     db.session.commit()
-    return redirect(url_for('rota_anuncio'))
+    return redirect(url_for('compra_anuncio'))
 
 @app.route("/anuncio/favoritar/<int:id>")
 @login_required
@@ -271,7 +271,7 @@ def favoritar_anuncio(id):
     favorito = Favorito(id, user_id)
     db.session.add(favorito)
     db.session.commit()
-    return redirect(url_for('rota_anuncio'))
+    return redirect(url_for('anuncio_favorito'))
 
 
 @app.route("/anuncios/pergunta")
@@ -301,13 +301,15 @@ def enviar_resposta():
 @app.route("/anuncios/compra")
 @login_required
 def compra_anuncio():
-    return render_template('compras_realizadas.html', compras = Compra.query.all(), titulo = "Compras")
+    user_id = current_user.id
+    return render_template('compras_realizadas.html', compras = Compra.query.filter_by(usuario_id = user_id).all(), titulo = "Compras")
 
 
 @app.route("/anuncios/favoritos")
 @login_required
 def anuncio_favorito():
-    return render_template('anuncios_favoritos.html', favoritos = Favorito.query.all(), titulo = "Favoritos")
+    user_id = current_user.id
+    return render_template('anuncios_favoritos.html', favoritos = Favorito.query.filter_by(usuario_id = user_id).all(), titulo = "Favoritos")
 
 
 @app.route("/config/categoria")
