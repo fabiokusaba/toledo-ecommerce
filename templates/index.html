@@ -61,6 +61,7 @@
                     <th>Detalhar</th>
                     <th>Comprar</th>
                     <th>Favoritar</th>
+                    <th>Dúvidas ?</th>
                 </tr>
             </thead>
             <tbody>
@@ -73,6 +74,7 @@
                         <td><a class="btn btn-outline-info" href="/anuncio/detalhar/{{anuncio.id}}">Detalhar</a></td>
                         <td><a class="btn btn-outline-success" href="/anuncio/comprar/{{anuncio.id}}">Comprar</a></td>
                         <td><a class="btn btn-outline-warning" href="/anuncio/favoritar/{{anuncio.id}}">Favoritar</a></td>
+                        <td><a class="btn btn-outline-warning" href="/anuncios/pergunta/enviar/{{anuncio.id}}">Pergunte</a></td>
                     </tr>
                 {% endfor %}
             </tbody>

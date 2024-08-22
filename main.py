@@ -276,16 +276,19 @@ def favoritar_anuncio(id):
 @app.route("/anuncios/pergunta")
 @login_required
 def pergunta_anuncio():
-    return render_template('pergunta.html', perguntas = Pergunta.query.all(), titulo = "Faça uma pergunta")
+    return render_template('pergunta.html', anuncio = Anuncio.query.get(id), perguntas = Pergunta.query.all(), titulo = "Faça uma pergunta")
 
 
-@app.route("/anuncios/pergunta/enviar", methods=['POST'])
+@app.route("/anuncios/pergunta/enviar/<int:id>", methods=['GET', 'POST'])
 @login_required
-def enviar_pergunta():
-    pergunta = Pergunta(request.form.get('texto'), request.form.get('anuncio_id'), request.form.get('usuario_id'))
-    db.session.add(pergunta)
-    db.session.commit()
-    return redirect(url_for('index'))
+def enviar_pergunta(id):
+    if request.method == 'POST':
+        user_id = current_user.id
+        pergunta = Pergunta(request.form.get('texto'), id, user_id)
+        db.session.add(pergunta)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('pergunta.html', anuncio = Anuncio.query.get(id), perguntas = Pergunta.query.all(), titulo = "Faça uma pergunta")
 
 @app.route("/anuncios/resposta/enviar", methods=['GET', 'POST'])
 @login_required

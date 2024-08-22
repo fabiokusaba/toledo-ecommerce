@@ -8,15 +8,9 @@
 <body>
     <h2>{{titulo}}</h2>
 
-    <form action="/anuncios/pergunta/enviar" method="post">
+    <form action="/anuncios/pergunta/enviar/{{anuncio.id}}" method="post">
         <label for="texto">Qual a sua pergunta?</label>
         <input type="text" id="texto" name="texto">
-
-        <label for="anuncio_id">Para qual anúncio você gostaria de enviar a sua pergunta?</label>
-        <input type="number" id="anuncio_id" name="anuncio_id">
-        
-        <label for="usuario_id">Qual o seu identificador de usuário?</label>
-        <input type="number" id="usuario_id" name="usuario_id">
 
         <input type="submit" value="Enviar">
     </form>
