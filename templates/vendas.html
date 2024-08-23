@@ -13,7 +13,30 @@
             <h2>{{titulo}}</h2>
         </div>
 
-        <p>Em construção...</p>
+        <table class="table table-striped table-responsive table-bordered">
+            <thead class="thead-default">
+                <tr>
+                    <th>ID</th>
+                    <th>Título</th>
+                    <th>Descrição</th>
+                    <th>Quantidade</th>
+                    <th>Preço</th>
+                    <th>Situação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for anuncio in anuncios %}
+                    <tr>
+                        <td>{{ anuncio.id }}</td>
+                        <td>{{ anuncio.titulo }}</td>
+                        <td>{{ anuncio.descricao }}</td>
+                        <td>{{ anuncio.quantidade }}</td>
+                        <td>{{ anuncio.preco }}</td>
+                        <td style="color: darkgreen;">Anúncio publicado</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
         <a class="btn btn-outline-secondary" href={{url_for('index')}}>Voltar</a>
     </div>
