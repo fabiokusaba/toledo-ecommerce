@@ -61,7 +61,7 @@ class Anuncio(db.Model):
     quantidade = db.Column('quantidade', db.Integer)
     preco = db.Column('preco', db.Numeric(10, 2))
     categoria_id = db.Column('categoria_id', db.Integer, db.ForeignKey("categoria.id"))
-    usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey("usuario.id"))
+    usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey("usuario.id", ondelete='CASCADE'))
 
     def __init__(self, titulo, descricao, quantidade, preco, categoria_id, usuario_id):
         self.titulo = titulo
@@ -83,7 +83,7 @@ class Categoria(db.Model):
 class Compra(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     anuncio_id = db.Column('anuncio_id', db.Integer, db.ForeignKey("anuncio.id"))
-    usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey("usuario.id"))
+    usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey("usuario.id", ondelete='CASCADE'))
 
     def __init__(self, anuncio_id, usuario_id):
         self.anuncio_id = anuncio_id
@@ -93,7 +93,7 @@ class Compra(db.Model):
 class Favorito(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     anuncio_id = db.Column('anuncio_id', db.Integer, db.ForeignKey("anuncio.id"))
-    usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey("usuario.id"))
+    usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey("usuario.id", ondelete='CASCADE'))
 
     def __init__(self, anuncio_id, usuario_id):
         self.anuncio_id = anuncio_id
@@ -104,7 +104,7 @@ class Pergunta(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     texto = db.Column('texto', db.String(150))
     anuncio_id = db.Column('anuncio_id', db.Integer, db.ForeignKey("anuncio.id"))
-    usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey("usuario.id"))
+    usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey("usuario.id", ondelete='CASCADE'))
 
     def __init__(self, texto, anuncio_id, usuario_id):
         self.texto = texto
@@ -116,7 +116,7 @@ class Resposta(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     texto = db.Column('texto', db.String(150))
     pergunta_id = db.Column('pergunta_id', db.Integer, db.ForeignKey("pergunta.id"))
-    usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey("usuario.id"))
+    usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey("usuario.id", ondelete='CASCADE'))
 
     def __init__(self, texto, pergunta_id, usuario_id):
         self.texto = texto
@@ -142,8 +142,11 @@ def load_user(id):
 
 @app.route("/")
 def index():
+    if current_user.is_authenticated:
+        user_id = current_user.id
+        return render_template('index.html', titulo = "Anúncios", anuncios = Anuncio.query.filter(Anuncio.usuario_id != user_id).all())
     return render_template('index.html', titulo = "Anúncios", anuncios = Anuncio.query.all())
-
+    
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -188,32 +191,36 @@ def buscar_usuario(id):
 @app.route("/usuario/editar/<int:id>", methods=['GET', 'POST'])
 @login_required
 def editar_usuario(id):
+    user_id = current_user.id
     usuario = Usuario.query.get(id)
-    if request.method == 'POST':
-        usuario.nome = request.form.get('nome')
-        usuario.email = request.form.get('email')
-        usuario.password = hashlib.sha512(str(request.form.get('password')).encode("utf-8")).hexdigest()
-        usuario.telefone = request.form.get('telefone')
-        usuario.endereco = request.form.get('endereco')
-        db.session.add(usuario)
-        db.session.commit()
-        return redirect(url_for('rota_usuario'))
-
+    if user_id == id:
+        if request.method == 'POST':
+            usuario.nome = request.form.get('nome')
+            usuario.email = request.form.get('email')
+            usuario.password = hashlib.sha512(str(request.form.get('password')).encode("utf-8")).hexdigest()
+            usuario.telefone = request.form.get('telefone')
+            usuario.endereco = request.form.get('endereco')
+            db.session.add(usuario)
+            db.session.commit()
+            return redirect(url_for('rota_usuario'))
     return render_template('editar_usuario.html', usuario = usuario, titulo = "Usuário")
 
 @app.route("/usuario/remover/<int:id>")
 @login_required
 def remover_usuario(id):
-    usuario = Usuario.query.get(id)
-    db.session.delete(usuario)
-    db.session.commit()
+    user_id = current_user.id
+    if user_id == id:
+        usuario = Usuario.query.get(id)
+        db.session.delete(usuario)
+        db.session.commit()
     return redirect(url_for('rota_usuario'))
 
 
 @app.route("/cadastro/anuncio")
 @login_required
 def rota_anuncio():
-    return render_template('anuncio.html', categorias = Categoria.query.all(), anuncios = Anuncio.query.all(), titulo = "Anúncio")
+    user_id = current_user.id
+    return render_template('anuncio.html', categorias = Categoria.query.all(), anuncios = Anuncio.query.filter_by(usuario_id = user_id).all(), titulo = "Anúncio")
 
 @app.route("/anuncio/cadastrar", methods=['POST'])
 @login_required
@@ -261,7 +268,7 @@ def comprar_anuncio(id):
     compra = Compra(id, user_id)
     db.session.add(compra)
     db.session.commit()
-    return redirect(url_for('compra_anuncio'))
+    return redirect(url_for('relatorio_compra'))
 
 @app.route("/anuncio/favoritar/<int:id>")
 @login_required
@@ -301,18 +308,11 @@ def enviar_resposta(id):
     return render_template('resposta.html', pergunta = Pergunta.query.get(id), respostas = Resposta.query.all(), titulo = "Pense na sua resposta")
 
 
-@app.route("/anuncios/compra")
-@login_required
-def compra_anuncio():
-    user_id = current_user.id
-    return render_template('compras_realizadas.html', compras = Compra.query.filter_by(usuario_id = user_id).all(), titulo = "Compras")
-
-
 @app.route("/anuncios/favoritos")
 @login_required
 def anuncio_favorito():
     user_id = current_user.id
-    return render_template('anuncios_favoritos.html', favoritos = Favorito.query.filter_by(usuario_id = user_id).all(), titulo = "Favoritos")
+    return render_template('anuncios_favoritos.html', favoritos = Favorito.query.filter_by(usuario_id = user_id).all(), titulo = "Lista de Favoritos")
 
 
 @app.route("/config/categoria")
@@ -365,7 +365,8 @@ def relatorio_venda():
 @app.route("/relatorio/compras")
 @login_required
 def relatorio_compra():
-    return render_template('compras.html', titulo = "Relatório de Compras")
+    user_id = current_user.id
+    return render_template('compras_realizadas.html', compras = Compra.query.filter_by(usuario_id = user_id).all(), titulo = "Relatório de Compras")
 
 
 if __name__ == 'main':
