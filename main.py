@@ -287,17 +287,18 @@ def enviar_pergunta(id):
         pergunta = Pergunta(request.form.get('texto'), id, user_id)
         db.session.add(pergunta)
         db.session.commit()
-        return redirect(url_for('index'))
+        return redirect(url_for('pergunta_anuncio'))
     return render_template('pergunta.html', anuncio = Anuncio.query.get(id), perguntas = Pergunta.query.all(), titulo = "Faça uma pergunta")
 
-@app.route("/anuncios/resposta/enviar", methods=['GET', 'POST'])
+@app.route("/anuncios/resposta/enviar/<int:id>", methods=['GET', 'POST'])
 @login_required
-def enviar_resposta():
+def enviar_resposta(id):
     if request.method == 'POST':
-        pergunta = Resposta(request.form.get('texto'), request.form.get('pergunta_id'), request.form.get('usuario_id'))
+        user_id = current_user.id
+        pergunta = Resposta(request.form.get('texto'), id, user_id)
         db.session.add(pergunta)
         db.session.commit()
-    return render_template('resposta.html', respostas = Resposta.query.all(), titulo = "Pense na resposta")
+    return render_template('resposta.html', pergunta = Pergunta.query.get(id), respostas = Resposta.query.all(), titulo = "Pense na sua resposta")
 
 
 @app.route("/anuncios/compra")
@@ -357,7 +358,8 @@ def remover_categoria(id):
 @app.route("/relatorio/vendas")
 @login_required
 def relatorio_venda():
-    return render_template('vendas.html', titulo = "Relatório de Vendas")
+    user_id = current_user.id
+    return render_template('vendas.html', anuncios = Anuncio.query.filter_by(usuario_id = user_id).all(), titulo = "Relatório de Vendas")
 
 
 @app.route("/relatorio/compras")
