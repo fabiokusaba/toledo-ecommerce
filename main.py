@@ -115,7 +115,7 @@ class Pergunta(db.Model):
 class Resposta(db.Model):
     id = db.Column('id', db.Integer, primary_key=True)
     texto = db.Column('texto', db.String(150))
-    pergunta_id = db.Column('pergunta_id', db.Integer, db.ForeignKey("pergunta.id"))
+    pergunta_id = db.Column('pergunta_id', db.Integer, db.ForeignKey("pergunta.id", ondelete='CASCADE'))
     usuario_id = db.Column('usuario_id', db.Integer, db.ForeignKey("usuario.id", ondelete='CASCADE'))
 
     def __init__(self, texto, pergunta_id, usuario_id):
