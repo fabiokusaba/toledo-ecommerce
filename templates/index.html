@@ -16,28 +16,25 @@
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href={{url_for("rota_usuario")}}>Cadastrar Usuário</a>
+                    <a class="nav-link" href={{url_for("rota_usuario")}}>Usuário</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href={{url_for("rota_anuncio")}}>Cadastrar Anúncio</a>
+                    <a class="nav-link" href={{url_for("rota_anuncio")}}>Anúncio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href={{url_for("rota_categoria")}}> Cadastrar Categoria</a>
+                    <a class="nav-link" href={{url_for("rota_categoria")}}>Categoria</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href={{url_for("pergunta_anuncio")}}>Perguntas & Respostas</a>
+                    <a class="nav-link" href={{url_for("pergunta_anuncio")}}>Q&A</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href={{url_for("compra_anuncio")}}>Compras realizadas</a>
+                    <a class="nav-link" href={{url_for("anuncio_favorito")}}>Favoritos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href={{url_for("anuncio_favorito")}}>Anúncios favoritados</a>
+                    <a class="nav-link" href={{url_for("relatorio_venda")}}>Vendas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href={{url_for("relatorio_venda")}}>Relatório de Vendas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href={{url_for("relatorio_compra")}}>Relatório de Compras</a>
+                    <a class="nav-link" href={{url_for("relatorio_compra")}}>Compras</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href={{url_for("logout")}}>Logout</a>
@@ -74,7 +71,7 @@
                         <td><a class="btn btn-outline-info" href="/anuncio/detalhar/{{anuncio.id}}">Detalhar</a></td>
                         <td><a class="btn btn-outline-success" href="/anuncio/comprar/{{anuncio.id}}">Comprar</a></td>
                         <td><a class="btn btn-outline-warning" href="/anuncio/favoritar/{{anuncio.id}}">Favoritar</a></td>
-                        <td><a class="btn btn-outline-warning" href="/anuncios/pergunta/enviar/{{anuncio.id}}">Pergunte</a></td>
+                        <td><a class="btn btn-outline-primary" href="/anuncios/pergunta/enviar/{{anuncio.id}}">Pergunte</a></td>
                     </tr>
                 {% endfor %}
             </tbody>
