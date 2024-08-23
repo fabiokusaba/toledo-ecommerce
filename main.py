@@ -8,15 +8,18 @@ import hashlib
 
 app = Flask(__name__)
 
-user = 'root'
-password = '@Lucia25037795'
-host = 'localhost'
-port = '3306'
-database = 'trocafacil'
-escaped_password = quote(password)
-uri = f'mysql+pymysql://{user}:{escaped_password}@{host}:{port}/{database}'
+# Config local
+# user = 'root'
+# password = '@Lucia25037795'
+# host = 'localhost'
+# port = '3306'
+# database = 'trocafacil'
+# escaped_password = quote(password)
+# uri = f'mysql+pymysql://{user}:{escaped_password}@{host}:{port}/{database}'
+# app.config['SQLALCHEMY_DATABASE_URI'] = uri
 
-app.config['SQLALCHEMY_DATABASE_URI'] = uri
+# Config pythonanywhere
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://fabiokusaba1:fabio2503@fabiokusaba1.mysql.pythonanywhere-services.com:3306/fabiokusaba1$trocafacil'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -373,3 +376,4 @@ if __name__ == 'main':
     with app.app_context():
         print('trocafacil')
         db.create_all()
+    app.run()
